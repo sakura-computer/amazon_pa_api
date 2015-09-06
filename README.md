@@ -29,7 +29,7 @@ You can use easily Amazon Product Advertising API calls, like this.
 	
 	puts item_lookup.get.body     # => XML
 ```
-Or, you can set Amazon credentials as hash, like this.
+Or you can set Amazon credentials as hash, like this.
 ```ruby
     credentials = { access_key_id: "Your Amazon AWS access key id",
                     secret_access_key: "Your Amazon AWS secret key",
@@ -43,7 +43,15 @@ Or, you can set Amazon credentials as hash, like this.
     item_lookup.credentials = credentials
 	puts item_lookup.get.body     # => XML
 ```
-
+If you want to choice Amazon ECommerce end point, like this.
+```ruby
+	item_lookup = = AmazonPaApi::ItemLookup.new('B0026IAWMU', region: :uk)
+```
+You can use Amazon Product Advertising API operation's request parameters as instance methods.
+```ruby
+	item_lookup.id_type = :ean
+	item_lookup.condition = :new
+```
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
