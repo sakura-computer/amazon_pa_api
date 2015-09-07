@@ -12,6 +12,7 @@ module AmazonPaApi
       :response_group,
     ]
 
+    # SimilarityLookup required item_id.
     def initialize(item_id, region: :jp)
       super()
       self.item_id = item_id
