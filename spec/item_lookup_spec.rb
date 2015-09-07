@@ -141,6 +141,27 @@ describe AmazonPaApi::ItemLookup do
 
   end
 
+  describe "AWS credentials" do
+    context "is not supplied" do
+      it "raise error." do
+        @item_lookup = AmazonPaApi::ItemLookup.new('B009KYC6SQ')
+        expect{
+          @item_lookup.get
+        }.to raise_error StandardError
+      end
+    end
+  end
 
-    
+  describe "#region" do
+    context "is invalid" do
+      it "raise error." do
+        @item_lookup = AmazonPaApi::ItemLookup.new('B009KYC6SQ')
+        @item_lookup.region = :hoge
+        expect{
+          @item_lookup.get
+        }.to raise_error StandardError
+      end
+    end
+  end
+
 end

@@ -1,7 +1,9 @@
+require 'amazon_pa_api/operations/operation'
+
 module AmazonPaApi
   class ItemSearch < AmazonPaApi::Operation
 
-    #= this operation has request parameters.
+    # This is list of Amazon Product Advertising API request parameters.
     REQUEST_PARAMETERS = [
       :actor,
       :artist, 
@@ -40,7 +42,7 @@ module AmazonPaApi
       :response_group
     ]
 
-    #= ItemSearch requires keywords and search index.
+    # ItemSearch requires keywords and search index.
     def initialize(keywords, search_index, region: :jp)
       super()
       self.keywords = keywords

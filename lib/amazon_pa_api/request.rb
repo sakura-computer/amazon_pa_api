@@ -1,10 +1,13 @@
 # coding: utf-8
 module AmazonPaApi
+  #= This is mixed into operations class.
   module Request
+    # HTTP access parameters
     attr_accessor :open_timeout, :read_timeout
     
     private
 
+    # it get HTTP response.
     def get_response(uri_or_url, limit = 10)
       raise "Redirect is too depp." if limit <= 0
       uri = uri_or_url.class == String ? URI.parse(uri_or_url) : uri_or_url
@@ -25,7 +28,7 @@ module AmazonPaApi
         redirect_uri = URI::parse(response.header['location'])
         return get_response(redirect_uri, limit -1 )
       else
-        raise "Error connecting to Amazon. response: #{response.to_w}"
+        raise "Error connecting to Amazon. response: #{response.to_s}"
       end
     end
                      
