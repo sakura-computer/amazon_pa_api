@@ -5,6 +5,7 @@ Supported Amazon Product Advertising API operations.
 
 * ItemLookup
 * ItemSearch
+* SimilarityLookup
 
 ## Installation
 
@@ -28,9 +29,9 @@ You can use easily Amazon Product Advertising API calls, like this.
 
 ```
     item_lookup = AmazonPaApi::ItemLookup.new('B0026IAWMU')
-    item_lookup.access_key_id = "Your Amazon AWS access key id"
-    item_lookup.secret_access_key = "Your Amazon AWS secret key"
-    item_lookup.associate_tag = "Your Amazon associate tag"
+    item_lookup.access_key_id = "Your Amazon AWS access key id"  # required
+    item_lookup.secret_access_key = "Your Amazon AWS secret key" # required
+    item_lookup.associate_tag = "Your Amazon associate tag"      # if you want
 	
     puts item_lookup.get.body     # => XML
 ```
@@ -54,14 +55,16 @@ Or you can set Amazon credentials as hash, like this.
 If you want to choice Amazon ECommerce end point, like this.
 
 ```
-    item_lookup = = AmazonPaApi::ItemLookup.new('B0026IAWMU', region: :uk)
+    item_lookup = AmazonPaApi::ItemLookup.new('B00NLDYGDK', region: :uk)
 ```
 
 You can use Amazon Product Advertising API operation's request parameters as instance methods.
 
 ```
-    item_lookup.id_type = :ean
-    item_lookup.condition = :new
+    item_lookup.id_type = 'EAN'
+	item_lookup.seach_index = 'Books'
+    item_lookup.condition = 'New'
+    puts item_search.get.body     # => XML	
 ```
 
 ## Development

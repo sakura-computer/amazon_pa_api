@@ -20,7 +20,7 @@ describe AmazonPaApi::ItemSearch do
     
     describe "PA api request #get" do
       it "can get response as xml" do
-        expect(@item_search.get).not_to eq nil
+        expect(@item_search.get.body.include?("Errors")).to eq false
       end
     end
   end
