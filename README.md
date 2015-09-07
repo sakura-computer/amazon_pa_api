@@ -31,7 +31,7 @@ You can use easily Amazon Product Advertising API calls, like this.
     item_lookup = AmazonPaApi::ItemLookup.new('B0026IAWMU')
     item_lookup.access_key_id = "Your Amazon AWS access key id"  # required
     item_lookup.secret_access_key = "Your Amazon AWS secret key" # required
-    item_lookup.associate_tag = "Your Amazon associate tag"      # if you want
+    item_lookup.associate_tag = "Your Amazon associate tag"      # required
 	
     puts item_lookup.get.body     # => XML
 ```
