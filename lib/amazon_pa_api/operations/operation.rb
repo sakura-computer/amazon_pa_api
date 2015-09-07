@@ -1,28 +1,30 @@
+require 'amazon_pa_api/request'
+
 module AmazonPaApi
   #= This is the parent class of every PA api Operations performed.
   class Operation
 
     include AmazonPaApi::Request
     
-    #= PA api requires thease credentials.
+    # PA api requires thease credentials.
     # String - You must to set thease before performing operations.
     attr_accessor :access_key_id, :secret_access_key, :associate_tag
 
-    #= Subclass set this variables at initialize.
+    # Subclass set this variables at initialize.
     # String - The name of operation you want to perform.
     attr_accessor :operation
 
-    #= Subclass set this variables at initialize.
+    # Subclass set this variables at initialize.
     # String - It will be use this to pick the right associates key up.
     #          default is jp.
     attr_accessor :region
 
-    #= You can get PA api response via thease.
+    # You can get PA api response via thease.
     attr_reader :header, :body
     
     API_VERSION = "2010-09-01".freeze
 
-    #= PA api end points.
+    # PA api end points.
     #  PA api calls can be sent to any of 6 regions.
     END_POINTS = {
       ca: "http://ecs.amazonaws.ca/onca/xml",
@@ -39,25 +41,12 @@ module AmazonPaApi
       end
     end
 
-    #= Execute the request to Amazon.
+    # Execute the request to Amazon.
     def get
-      if self.access_key_id.nil? || self.access_key_id.to_s.size == 0 ||
-         self.secret_access_key.nil? || self.secret_access_key.to_s.size == 0 ||
-         self.associate_tag.nil? || self.associate_tag.to_s.size == 0 
-        raise "PA api requires AWS  credentials."
-      end
-
-      unsigned_uri = URI.parse("#{END_POINTS[self.region]}?#{request_params_string}")
-      uri = add_signature(unsigned_uri)
-
-      response = get_response uri
-      @header = response.header
-      @body = response.body
-
-      response
+      request
     end
 
-    #= You can set PA api credentials via this.
+    # You can set PA api credentials via this.
     def credentials=(access_key_id: '',
                      secret_access_key: '',
                      associate_tag:''
@@ -69,7 +58,7 @@ module AmazonPaApi
     
     protected
 
-    #= It set instance variable from defined request parameters in subclass.
+    # It set instance variable from defined request parameters in subclass.
     def params
       self.class.const_get("REQUEST_PARAMETERS").inject({}) do |parameters, param|
         value = instance_variable_get("@#{param}")
@@ -78,7 +67,7 @@ module AmazonPaApi
       end
     end
 
-    #= It set common query parameters as hash.
+    # It set common query parameters as hash.
     def request_params
       {"Service"                    => "AWSECommerceService",
        "Timestamp"                  => Time.now.utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -89,7 +78,7 @@ module AmazonPaApi
       }.merge!(params)
     end
 
-    #= It sort and set all query parameters as hash.
+    # It sort and set all query parameters as hash.
     def request_params_string
       request_params.sort.inject('') do |params_string, (k,v)|
         params_string  += '&' unless params_string.size == 0
@@ -100,7 +89,7 @@ module AmazonPaApi
 
     private
 
-    #= it add signature parameter from uri
+    # it add signature parameter from uri
     #  URI - To Amazon AWS ECommerce Service.
     def add_signature(unsigned_uri)
       signature = OpenSSL::HMAC.digest(OpenSSL::Digest::Digest.new("sha256"),
@@ -113,5 +102,24 @@ module AmazonPaApi
 
     end
 
+    # it add signature and requests Amazon via http.
+    def request
+      if self.access_key_id.nil? ||
+         self.secret_access_key.nil? || 
+         self.associate_tag.nil? 
+        raise "PA api requires AWS credentials."
+      end
+      raise "Invalid region. region: #{self.region}" unless END_POINTS.include?(self.region)
+
+      unsigned_uri = URI.parse("#{END_POINTS[self.region]}?#{request_params_string}")
+      uri = add_signature(unsigned_uri)
+
+      response = get_response uri
+      @header = response.header
+      @body = response.body
+
+      response
+    end
+    
   end
 end

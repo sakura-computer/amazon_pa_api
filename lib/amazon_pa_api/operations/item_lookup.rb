@@ -1,7 +1,9 @@
+require 'amazon_pa_api/operations/operation'
+
 module AmazonPaApi
   class ItemLookup < AmazonPaApi::Operation
 
-    #= this operation has request parameters.
+    # This is list of Amazon Product Advertising API request parameters.
     REQUEST_PARAMETERS = [
       :condition,
       :id_type,
@@ -20,7 +22,7 @@ module AmazonPaApi
       :response_group,
     ]
 
-    #= ItemLookup requires ItemId.
+    # ItemLookup requires ItemId.
     def initialize(item_id, region: :jp)
       super()
       self.item_id = item_id

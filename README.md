@@ -1,6 +1,10 @@
 # AmazonPaApi
 
-The purpose of this gem is to make use of Amazon Product Advertising API and pull easily Amazon products information.
+The purpose of this gem is to make use of Amazon Product Advertising API and pull easily Amazon products information.  
+Supported Amazon Product Advertising API operations.
+
+* ItemLookup
+* ItemSearch
 
 ## Installation
 
@@ -21,16 +25,19 @@ Or install it yourself as:
 ## Usage
 
 You can use easily Amazon Product Advertising API calls, like this.
-```ruby
-	item_lookup = AmazonPaApi::ItemLookup.new('B0026IAWMU')
-	item_lookup.access_key_id = "Your Amazon AWS access key id"
-	item_lookup.secret_access_key = "Your Amazon AWS secret key"
-	item_lookup.associate_tag = "Your Amazon associate tag"
-	
-	puts item_lookup.get.body     # => XML
+
 ```
+    item_lookup = AmazonPaApi::ItemLookup.new('B0026IAWMU')
+    item_lookup.access_key_id = "Your Amazon AWS access key id"
+    item_lookup.secret_access_key = "Your Amazon AWS secret key"
+    item_lookup.associate_tag = "Your Amazon associate tag"
+	
+    puts item_lookup.get.body     # => XML
+```
+
 Or you can set Amazon credentials as hash, like this.
-```ruby
+
+```
     credentials = { access_key_id: "Your Amazon AWS access key id",
                     secret_access_key: "Your Amazon AWS secret key",
 	 			   	associate_tag: "Your Amazon associate tag"
@@ -38,20 +45,25 @@ Or you can set Amazon credentials as hash, like this.
     item_search = AmazonPaApi::ItemSearch.new('Attack on Titan', 'Books')
     item_search.credentials = credentials
     puts item_search.get.body     # => XML
-
-	item_lookup = AmazonPaApi::ItemLookup.new('B0026IAWMU')
+    
+    item_lookup = AmazonPaApi::ItemLookup.new('B0026IAWMU')
     item_lookup.credentials = credentials
-	puts item_lookup.get.body     # => XML
+    puts item_lookup.get.body     # => XML
 ```
+
 If you want to choice Amazon ECommerce end point, like this.
-```ruby
-	item_lookup = = AmazonPaApi::ItemLookup.new('B0026IAWMU', region: :uk)
+
 ```
+    item_lookup = = AmazonPaApi::ItemLookup.new('B0026IAWMU', region: :uk)
+```
+
 You can use Amazon Product Advertising API operation's request parameters as instance methods.
-```ruby
-	item_lookup.id_type = :ean
-	item_lookup.condition = :new
+
 ```
+    item_lookup.id_type = :ean
+    item_lookup.condition = :new
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

@@ -1,9 +1,7 @@
 require "amazon_pa_api/version"
-require "amazon_pa_api/request"
 require "amazon_pa_api/extensions"
-require "amazon_pa_api/operation"
-require "amazon_pa_api/item_lookup"
-require "amazon_pa_api/item_search"
+require "amazon_pa_api/operations/item_lookup"
+require "amazon_pa_api/operations/item_search"
 
 require "net/http"
 require "cgi"
