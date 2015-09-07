@@ -19,7 +19,7 @@ module AmazonPaApi
     #          default is jp.
     attr_accessor :region
 
-    # You can get PA api response via thease.
+    # You can get PA api response via these.
     attr_reader :header, :body
     
     API_VERSION = "2010-09-01".freeze
@@ -79,7 +79,7 @@ module AmazonPaApi
       }.merge!(params)                                                                                 
     end
 
-    # It sort and set all query parameters as hash.
+    # It sort and set all query parameters as string.
     def request_params_string
       request_params.sort.inject('') do |params_string, (k,v)|
         params_string  += '&' unless params_string.size == 0
