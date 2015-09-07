@@ -106,17 +106,32 @@ describe AmazonPaApi::ItemLookup do
     end
 
     describe "PA api request #get" do
+
       context "IdType: ASIN" do
         it "can get response as xml" do
           @item_lookup.id_type = "ASIN"
-          expect(@item_lookup.get).not_to eq nil
+          expect(@item_lookup.get.body.include?("Errors")).to eq false
+        end
+      end
+
+      context "IdType: EAN" do
+        it "can get response as xml" do
+          @item_lookup = AmazonPaApi::ItemLookup.new('9784634034204')
+          check_aws_env
+          @item_lookup.access_key_id = ENV['AWS_ACCESS_KEY_ID']
+          @item_lookup.secret_access_key = ENV['AWS_SECRET_ACCESS_KEY']
+          @item_lookup.associate_tag = ENV['ASSOCIATE_TAG']
+
+          @item_lookup.id_type = "EAN"
+          @item_lookup.search_index = "Books"
+          expect(@item_lookup.get.body.include?("Errors")).to eq false
         end
       end
     end
 
     describe "#body" do
       it "can show response body" do
-        expect(@item_lookup.get.body).not_to eq nil
+        expect(@item_lookup.get.body.include?("Errors")).to eq false
       end
     end
     
@@ -153,15 +168,36 @@ describe AmazonPaApi::ItemLookup do
   end
 
   describe "#region" do
+    before do
+      @item_lookup = AmazonPaApi::ItemLookup.new('B009KYC6SQ')      
+      check_aws_env
+      @item_lookup.access_key_id = ENV['AWS_ACCESS_KEY_ID']
+      @item_lookup.secret_access_key = ENV['AWS_SECRET_ACCESS_KEY']
+      @item_lookup.associate_tag = ENV['ASSOCIATE_TAG']
+    end
+    
     context "is invalid" do
       it "raise error." do
-        @item_lookup = AmazonPaApi::ItemLookup.new('B009KYC6SQ')
         @item_lookup.region = :hoge
         expect{
           @item_lookup.get
         }.to raise_error StandardError
       end
     end
+
+    context "is valid" do
+      it "can get response as xml" do
+        @item_lookup = AmazonPaApi::ItemLookup.new('B00NLDYGDK', region: :uk)
+        check_aws_env
+        @item_lookup.access_key_id = ENV['AWS_ACCESS_KEY_ID']
+        @item_lookup.secret_access_key = ENV['AWS_SECRET_ACCESS_KEY']
+        @item_lookup.associate_tag = ENV['ASSOCIATE_TAG']
+        
+        @item_lookup.region = :uk
+        expect(@item_lookup.get.body.include?("Errors")).to eq false      
+      end
+    end
+      
   end
 
 end

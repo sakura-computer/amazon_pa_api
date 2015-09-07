@@ -69,13 +69,14 @@ module AmazonPaApi
 
     # It set common query parameters as hash.
     def request_params
-      {"Service"                    => "AWSECommerceService",
-       "Timestamp"                  => Time.now.utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
-       "AWSAccessKeyId"             => self.access_key_id.to_s,
-       "Operation"                  => self.operation,
-       "AssociateTag"               => self.associate_tag.to_s,
-       "Version"                    => API_VERSION,
-      }.merge!(params)
+      parameters ={
+        "Service"                    => "AWSECommerceService",
+        "Timestamp"                  => Time.now.utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "AWSAccessKeyId"             => self.access_key_id.to_s,
+        "AssociateTag"               => self.associate_tag.to_s,
+        "Operation"                  => self.operation,
+        "Version"                    => API_VERSION,
+      }.merge!(params)                                                                                 
     end
 
     # It sort and set all query parameters as hash.
@@ -105,9 +106,9 @@ module AmazonPaApi
     # it add signature and requests Amazon via http.
     def request
       if self.access_key_id.nil? ||
-         self.secret_access_key.nil? || 
-         self.associate_tag.nil? 
-        raise "PA api requires AWS credentials."
+         self.secret_access_key.nil? ||
+         self.associate_tag.nil?
+        raise "PA api requires AWS credentials. Please set access_key_id, secret_access_key and associate_tag, try again."
       end
       raise "Invalid region. region: #{self.region}" unless END_POINTS.include?(self.region)
 
