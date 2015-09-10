@@ -26,4 +26,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 3.0"
 
   spec.add_development_dependency "accessor_extender", "~> 1.0"
+  spec.add_runtime_dependency "accessor_extender", "~> 1.0"
+
 end
