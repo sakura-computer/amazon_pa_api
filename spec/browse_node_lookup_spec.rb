@@ -11,9 +11,11 @@ describe AmazonPaApi::BrowseNodeLookup do
   describe "operation and request " do
     before do
       check_aws_env
-      @browse_node_lookup.access_key_id = ENV['AWS_ACCESS_KEY_ID']
-      @browse_node_lookup.secret_access_key = ENV['AWS_SECRET_ACCESS_KEY']
-      @browse_node_lookup.associate_tag = ENV['ASSOCIATE_TAG']
+      @browse_node_lookup.credentials = {access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+                                  secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+                                  associate_tag: ENV['ASSOCIATE_TAG'],
+                                 }
+
     end
     
     describe "PA api request #get" do

@@ -29,27 +29,31 @@ Or install it yourself as:
 You can use easily Amazon Product Advertising API calls, like this:
 
 ```
+    AmazonPaApi::ItemLookup.access_key_id = "Your Amazon AWS access key id"
+	AmazonPaApi::ItemLookup.secret_access_key = "Your Amazon AWS secret access key"
+    AmazonPaApi::ItemLookup.associate_tag = "Your Amazon AWS associate tag"
+
     item_lookup = AmazonPaApi::ItemLookup.new('B0026IAWMU')
-    item_lookup.access_key_id = "Your Amazon AWS access key id"  # required
-    item_lookup.secret_access_key = "Your Amazon AWS secret key" # required
-    item_lookup.associate_tag = "Your Amazon associate tag"      # required
-	
     puts item_lookup.get.body     # => XML
+
+    # credentials are handled as class variables
+    item_search = AmazonPaApi::ItemSearch.new('Attack on Titan', 'Books')
+    puts item_search.get.body     # => XML
 ```
 
 Or you can set Amazon credentials as hash, like this:
 
 ```
-    credentials = { access_key_id: "Your Amazon AWS access key id",
-                    secret_access_key: "Your Amazon AWS secret key",
-	 			   	associate_tag: "Your Amazon associate tag"
-				  }
     item_search = AmazonPaApi::ItemSearch.new('Attack on Titan', 'Books')
-    item_search.credentials = credentials
+    item_search.credentials = { access_key_id: "Your Amazon AWS access key id",
+                                secret_access_key: "Your Amazon AWS secret key",
+                                associate_tag: "Your Amazon associate tag"
+                              } # required
+
     puts item_search.get.body     # => XML
-    
+
+    # credentials are handled as class variables
     item_lookup = AmazonPaApi::ItemLookup.new('B0026IAWMU')
-    item_lookup.credentials = credentials
     puts item_lookup.get.body     # => XML
 ```
 
@@ -62,7 +66,6 @@ If you want to choice Amazon ECommerce end point:
 
     # or like this:
     item_lookup = AmazonPaApi::ItemLookup.new('B0026IAWMU')
-    item_lookup.credentials = credentials
     puts item_lookup.get.body     # => XML
 
 	item_lookup.region = :uk
@@ -83,13 +86,7 @@ You can use Amazon Product Advertising API operation's request parameters as ins
 ### ItemLookup
 
 ```
-    credentials = { access_key_id: "Your Amazon AWS access key id",
-                    secret_access_key: "Your Amazon AWS secret key",
-	 			   	associate_tag: "Your Amazon associate tag"
-				  }
-
     item_lookup = AmazonPaApi::ItemLookup.new('B0026IAWMU')
-    item_lookup.credentials = credentials
     puts item_lookup.get.body     # => XML
 
 ```
@@ -97,37 +94,21 @@ You can use Amazon Product Advertising API operation's request parameters as ins
 ### ItemSearch
 
 ```
-    credentials = { access_key_id: "Your Amazon AWS access key id",
-                    secret_access_key: "Your Amazon AWS secret key",
-	 			   	associate_tag: "Your Amazon associate tag"
-				  }
     item_search = AmazonPaApi::ItemSearch.new('Attack on Titan', 'Books')
-    item_search.credentials = credentials
     puts item_search.get.body     # => XML
 ```
 
 ### SimilarityLookup
 
 ```
-    credentials = { access_key_id: "Your Amazon AWS access key id",
-                    secret_access_key: "Your Amazon AWS secret key",
-	 			   	associate_tag: "Your Amazon associate tag"
-				  }
     similarity_lookup = AmazonPaApi::SimilarityLookup.new('B0026IAWNU')
-    similarity_lookup.credentials = credentials
     puts similarity_lookup.get.body     # => XML
 ```
 
 ### BrowseNodeLookup
 
 ```
-    credentials = { access_key_id: "Your Amazon AWS access key id",
-                    secret_access_key: "Your Amazon AWS secret key",
-	 			   	associate_tag: "Your Amazon associate tag"
-				  }
-
     browse_node_lookup = AmazonPaApi::BrowseNodeLookup(71443051)
-    browse_node_lookup.credentials = credentials
     puts browse_node_lookup.get.body     # => XML
 ```
 

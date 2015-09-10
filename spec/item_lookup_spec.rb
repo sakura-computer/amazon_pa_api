@@ -43,9 +43,10 @@ describe AmazonPaApi::ItemLookup do
   describe "operation and request " do
     before do
       check_aws_env
-      @item_lookup.access_key_id = ENV['AWS_ACCESS_KEY_ID']
-      @item_lookup.secret_access_key = ENV['AWS_SECRET_ACCESS_KEY']
-      @item_lookup.associate_tag = ENV['ASSOCIATE_TAG']
+      @item_lookup.credentials = { access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+                                   secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+                                   associate_tag: ENV['ASSOCIATE_TAG'],
+                                 }
     end
     
     describe "PA api operation parameter" do
@@ -78,7 +79,7 @@ describe AmazonPaApi::ItemLookup do
       context "AWSAccessKeyId" do
         it "is set as query parameter" do
           expect(@item_lookup.send(:request_params).include?("AWSAccessKeyId")).to eq true
-          expect(@item_lookup.send(:request_params)["AWSAccessKeyId"]).to eq @item_lookup.access_key_id
+          expect(@item_lookup.send(:request_params)["AWSAccessKeyId"]).to eq AmazonPaApi::ItemLookup.access_key_id
         end
       end
 
@@ -92,7 +93,7 @@ describe AmazonPaApi::ItemLookup do
       context "AssociateTag" do
         it "is set as query parameter" do
           expect(@item_lookup.send(:request_params).include?("AssociateTag")).to eq true
-          expect(@item_lookup.send(:request_params)["AssociateTag"]).to eq @item_lookup.associate_tag
+          expect(@item_lookup.send(:request_params)["AssociateTag"]).to eq AmazonPaApi::Operation.associate_tag
         end
       end
 
@@ -118,9 +119,10 @@ describe AmazonPaApi::ItemLookup do
         it "can get response as xml" do
           @item_lookup = AmazonPaApi::ItemLookup.new('9784634034204')
           check_aws_env
-          @item_lookup.access_key_id = ENV['AWS_ACCESS_KEY_ID']
-          @item_lookup.secret_access_key = ENV['AWS_SECRET_ACCESS_KEY']
-          @item_lookup.associate_tag = ENV['ASSOCIATE_TAG']
+          @item_lookup.credentials = {access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+                                      secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+                                      associate_tag: ENV['ASSOCIATE_TAG'],
+                                     }
 
           @item_lookup.id_type = "EAN"
           @item_lookup.search_index = "Books"
@@ -156,24 +158,14 @@ describe AmazonPaApi::ItemLookup do
 
   end
 
-  describe "AWS credentials" do
-    context "is not supplied" do
-      it "raise error." do
-        @item_lookup = AmazonPaApi::ItemLookup.new('B009KYC6SQ')
-        expect{
-          @item_lookup.get
-        }.to raise_error StandardError
-      end
-    end
-  end
-
   describe "#region" do
     before do
       @item_lookup = AmazonPaApi::ItemLookup.new('B009KYC6SQ')      
       check_aws_env
-      @item_lookup.access_key_id = ENV['AWS_ACCESS_KEY_ID']
-      @item_lookup.secret_access_key = ENV['AWS_SECRET_ACCESS_KEY']
-      @item_lookup.associate_tag = ENV['ASSOCIATE_TAG']
+      @item_lookup.credentials = { access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+                                   secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+                                   associate_tag: ENV['ASSOCIATE_TAG'],
+                                 }
     end
     
     context "is invalid" do
@@ -189,9 +181,6 @@ describe AmazonPaApi::ItemLookup do
       it "can get response as xml" do
         @item_lookup = AmazonPaApi::ItemLookup.new('B00NLDYGDK', region: :uk)
         check_aws_env
-        @item_lookup.access_key_id = ENV['AWS_ACCESS_KEY_ID']
-        @item_lookup.secret_access_key = ENV['AWS_SECRET_ACCESS_KEY']
-        @item_lookup.associate_tag = ENV['ASSOCIATE_TAG']
         
         @item_lookup.region = :uk
         expect(@item_lookup.get.body.include?("Errors")).to eq false      
