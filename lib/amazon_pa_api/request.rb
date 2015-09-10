@@ -30,6 +30,9 @@ module AmazonPaApi
       else
         raise "Error connecting to Amazon. response: #{response.to_s}"
       end
+
+    rescue
+      response
     end
                      
   end

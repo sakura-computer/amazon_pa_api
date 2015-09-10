@@ -8,7 +8,7 @@ module AmazonPaApi
     
     # PA api requires thease credentials.
     # String - You must to set thease before performing operations.
-    attr_accessor :access_key_id, :secret_access_key, :associate_tag
+    cattr_accessor :access_key_id, :secret_access_key, :associate_tag
 
     # Subclass set this variables at initialize.
     # String - The name of operation you want to perform.
@@ -51,11 +51,11 @@ module AmazonPaApi
                      secret_access_key: '',
                      associate_tag:''
                     )
-      self.access_key_id = access_key_id
-      self.secret_access_key = secret_access_key
-      self.associate_tag = associate_tag
+      self.class.access_key_id = access_key_id
+      self.class.secret_access_key = secret_access_key
+      self.class.associate_tag = associate_tag
     end
-    
+
     protected
 
     # It set instance variable from defined request parameters in subclass.
@@ -72,18 +72,18 @@ module AmazonPaApi
       parameters ={
         "Service"                    => "AWSECommerceService",
         "Timestamp"                  => Time.now.utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "AWSAccessKeyId"             => self.access_key_id.to_s,
-        "AssociateTag"               => self.associate_tag.to_s,
+        "AWSAccessKeyId"             => Operation.access_key_id.to_s,
+        "AssociateTag"               => Operation.associate_tag.to_s,
         "Operation"                  => self.operation,
         "Version"                    => API_VERSION,
-      }.merge!(params)                                                                                 
+      }.merge!(params)
     end
 
     # It sort and set all query parameters as string.
     def request_params_string
       request_params.sort.inject('') do |params_string, (k,v)|
         params_string  += '&' unless params_string.size == 0
-        params_string  += "#{k.to_s}=#{CGI.escape(v.to_s)}"
+        params_string  += "#{k.to_s}=#{CGI.escape(v.to_s).gsub('+', '%20')}"
         params_string
       end
     end
@@ -94,7 +94,7 @@ module AmazonPaApi
     #  URI - To Amazon AWS ECommerce Service.
     def add_signature(unsigned_uri)
       signature = OpenSSL::HMAC.digest(OpenSSL::Digest::Digest.new("sha256"),
-                                       self.secret_access_key,
+                                       Operation.secret_access_key.to_s,
                                        "GET\n#{unsigned_uri.host}\n#{unsigned_uri.path}\n#{unsigned_uri.query}"
                                       )
       signature = [signature].pack("m").chomp
@@ -105,9 +105,9 @@ module AmazonPaApi
 
     # it add signature and requests Amazon via http.
     def request
-      if self.access_key_id.nil? ||
-         self.secret_access_key.nil? ||
-         self.associate_tag.nil?
+      if self.class.access_key_id.nil? ||
+         self.class.secret_access_key.nil? ||
+         self.class.associate_tag.nil?
         raise "PA api requires AWS credentials. Please set access_key_id, secret_access_key and associate_tag, try again."
       end
       raise "Invalid region. region: #{self.region}" unless END_POINTS.include?(self.region)
